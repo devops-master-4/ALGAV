@@ -2,3 +2,5 @@
 .vscode/
 *.swo
 *.swp
+*.txt
+*.log

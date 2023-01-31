@@ -1,5 +1,6 @@
 import heapq
 from collections import defaultdict
+import string
 
 class Node:
     def __init__(self, char, freq):
@@ -25,6 +26,10 @@ class HuffmanCoder:
         freq_dict = defaultdict(int)
         for char in text:
             freq_dict[char] += 1
+
+        for char in string.printable:
+            freq_dict[char] += 0
+
         self.heap = [[weight, Node(char, weight)] for char, weight in freq_dict.items()]
         heapq.heapify(self.heap)
         while len(self.heap) > 1:
@@ -59,21 +64,41 @@ class HuffmanCoder:
                 decoded_text += self.reverse_codes[code]
                 code = ""
         return decoded_text
+    
+    def update_tree(self, char):
+        node_found = False
+        for i in range(len(self.heap)):
+            node = self.heap[i][1]
+            if node.char == char:
+                node_found = True
+                node.freq += 1
+                self.heap[i][0] = node.freq
+                break
+        if not node_found:
+            node = Node(char, 1)
+            self.heap.append([1, node])
+        heapq.heapify(self.heap)
+        while len(self.heap) > 1:
+            lo = heapq.heappop(self.heap)
+            hi = heapq.heappop(self.heap)
+            node = Node(None, lo[0] + hi[0])
+            node.left = lo[1]
+            node.right = hi[1]
+            heapq.heappush(self.heap, [node.freq, node])
+        self.codes = self.generate_huffman_code(self.heap[0][1])
+        self.reverse_codes = {v: k for k, v in self.codes.items()}
 
-hc = HuffmanCoder()
-text = "The bird is the word"
-hc.build_huffman_tree(text)
-encoded_text = hc.encode(text)
-decoded_text = hc.decode(encoded_text)
-print(f"Text: {text}")
-print(f"Encoded text: {encoded_text}")
-print(f"Decoded text: {decoded_text}")
-
-# add more text and encode/decode again
-text= "Nique sa mère!"
-hc.build_huffman_tree(text)
-encoded_text = hc.encode(text)
-decoded_text = hc.decode(encoded_text)
-print(f"Text: {text}")
-print(f"Encoded text: {encoded_text}")
-print(f"Decoded text: {decoded_text}")
+# execute the program
+if __name__ == "__main__":
+    huffman_coder = HuffmanCoder()
+    text = "abracadabra"
+    huffman_coder.build_huffman_tree(text)
+    encoded_text = huffman_coder.encode(text)
+    print(encoded_text)
+    decoded_text = huffman_coder.decode(encoded_text)
+    print(decoded_text)
+    huffman_coder.update_tree('H')
+    encoded_text = huffman_coder.encode(text)
+    print(encoded_text)
+    decoded_text = huffman_coder.decode(encoded_text)
+    print(decoded_text)
