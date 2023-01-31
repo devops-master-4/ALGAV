@@ -2,6 +2,32 @@ import heapq
 from collections import defaultdict
 import string
 
+import time
+import random
+import string
+
+def random_text(text_length: int) -> str:
+     return ''.join(random.choice(string.ascii_letters + string.digits) for i in range(text_length))
+     #return ''.join(random.choice(string.ascii_letters) for i in range(text_length))
+     #return ''.join(random.choice(string.ascii_letters.lower()) for i in range(text_length))
+
+
+text = input('Entrez un texte ou une longueur pour la génération aléatoire : ')
+try:
+    text = int(text)
+except:
+    text = str(text)
+
+if type(text) == int:
+    text = random_text(text)
+else:
+    text = text
+
+
+
+#start timer
+start = time.time()
+
 class Node:
     def __init__(self, char, freq):
         self.char = char
@@ -64,7 +90,9 @@ class HuffmanCoder:
                 decoded_text += self.reverse_codes[code]
                 code = ""
         return decoded_text
-    
+
+
+
     def update_tree(self, char):
         node_found = False
         for i in range(len(self.heap)):
@@ -91,7 +119,7 @@ class HuffmanCoder:
 # execute the program
 if __name__ == "__main__":
     huffman_coder = HuffmanCoder()
-    text = "abracadabra"
+    #text = "azertyuiop"
     huffman_coder.build_huffman_tree(text)
     encoded_text = huffman_coder.encode(text)
     print(encoded_text)
@@ -102,3 +130,6 @@ if __name__ == "__main__":
     print(encoded_text)
     decoded_text = huffman_coder.decode(encoded_text)
     print(decoded_text)
+
+    end = time.time()
+    print("Temps d'exécution total:", end - start, "secondes")

@@ -134,6 +134,7 @@ def HuffmanEncoding(the_data):
     return encodedOutput, the_nodes[0]
 
 
+
 def HuffmanDecoding(encodedData, huffmanTree):
     treeHead = huffmanTree
     decodedOutput = []
