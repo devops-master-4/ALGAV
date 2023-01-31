@@ -7,8 +7,22 @@ def random_text(text_length: int) -> str:
      #return ''.join(random.choice(string.ascii_letters) for i in range(text_length))
      #return ''.join(random.choice(string.ascii_letters.lower()) for i in range(text_length))
 
-texte  = random_text(100000) #"abracadabra"
 
+texte = input('Entrez un texte ou une longueur pour la génération aléatoire : ')
+try:
+    texte = int(texte)
+except:
+    texte = str(texte)
+
+if type(texte) == int:
+    texte = random_text(texte)
+else:
+    texte = texte
+
+
+
+#start timer
+start = time.time()
 
 class Nodes:
     def __init__(self, probability, symbol, gauche=None, droit=None):
@@ -27,8 +41,6 @@ class Nodes:
         # la direction de l'arbre (0 gauche, 1 droite)
         self.code = ''
 
-#start timer
-start = time.time()
 
 """ Calcul les probabilités de symboles dans les données spécifiées. """
 def CalculProba(the_data):
@@ -142,11 +154,9 @@ def HuffmanDecoding(encodedData, huffmanTree):
 
 
 
-
-
-print(texte)
+#print(texte)
 encoding, the_tree = HuffmanEncoding(texte)
-#print("Encodage affichage : ", encoding)
-#print("Decodage affichage : ", HuffmanDecoding(encoding, the_tree))
+print("Encodage affichage : ", encoding)
+print("Decodage affichage : ", HuffmanDecoding(encoding, the_tree))
 end = time.time()
 print("Temps d'exécution total:", end - start, "secondes")
